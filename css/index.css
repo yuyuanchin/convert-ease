@@ -1,0 +1,9 @@
+body {
+    padding: 0 32px 0 32px;
+}
+
+div {
+    background: url('../images/bg-5.png') no-repeat top center;
+    background-size: cover;
+    height: 100vh;
+}
