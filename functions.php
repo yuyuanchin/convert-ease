@@ -22,30 +22,44 @@ function uploadPDFFiles($files){
 
     $outputFile = $downloadDir . ($conversionType == "pdf2txt" ? "txt" : "pdf");
 
-    foreach ($files_array as $tmp_folder => $image_name) {
-    $inputFile = $uploadDir . $image_name;
+    foreach($files_array as $tmp_folder => $image_name){
+        $inputFile= $uploadDir.$image_name;
+        $javaCommand = "java -jar PDFConverter.jar $inputFile $outputFile $conversionType";
+        exec($javaCommand, $output, $returnVar);
 
-    // Compile the Java source file
-    $compileCommand = "javac PDFConverter.java";
-    exec($compileCommand, $compileOutput, $compileReturnVar);
-
-    if ($compileReturnVar !== 0) {
-        // Handle compilation error
-        return "Compilation failed: " . implode("\n", $compileOutput);
-    }
-
-    // Execute the compiled Java class
-    $executeCommand = "java PDFConverter $inputFile $outputFile $conversionType";
-    exec($executeCommand, $executeOutput, $executeReturnVar);
-
-    if ($executeReturnVar !== 0) {
-        // Handle execution error
-        return "Execution failed: " . implode("\n", $executeOutput);
-    }
-
+        if ($returnVar !== 0) {
+            // Log or handle the error
+            return "Conversion failed: " . implode("\n", $output);
+        }
     }
 
     return "success";
+
+}
+
+function uploadPDFFiles2($files){
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $uploadDir = "uploads/"; // Directory to store uploaded files
+        $downloadDir = "download/";
+        $pdfFile = $uploadDir . basename($_FILES["pdfFile"]["name"]);
+        move_uploaded_file($_FILES["pdfFile"]["tmp_name"], $pdfFile);
+
+        $conversionType = $_POST["conversionType"];
+        $outputFile = $downloadDir . ($conversionType == "pdf2txt" ? "txt" : "pdf");
+
+        // Call Java application
+        $javaCommand = "java -jar PDFConverter.jar $pdfFile $outputFile $conversionType";
+        exec($javaCommand, $output, $returnVar);
+
+        if ($returnVar === 0) {
+            echo "Conversion complete. <a href='$outputFile' download>Download Result</a>";
+        } else {
+            return "Conversion failed.";
+        }
+    }
+    return "success";
+
 }
 
 function downloadFile($filename) {

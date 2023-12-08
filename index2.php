@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST')
 $response = "";
 
 if(isset($_FILES['pdfFiles'])){
-    $response = uploadPDFFiles($_FILES);
+    $response = uploadPDFFiles2($_FILES);
 }
 
 if(isset($_POST['download'])){
