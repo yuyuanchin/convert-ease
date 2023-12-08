@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+
+:root {
+    --primary-100: #DBDBDB;
+    --primary-200: #9C9C9C;
+    --primary-300: #4E4E4E;
+    --primary-400: #070707;
+    --secondary-50: #F4F3FF;
+    --secondary-100: #EBE9FE;
+    --secondary-200: #DAD7FD;
+    --secondary-300: #BDB7FB;
+    --accent-400: #9C8EF7;
+    --accent-500: #7C5FF3;
+    --accent-600: #6A3EE9;
+    --accent-700: #5729CE;
+    --accent-800: #4C24B3;
+    --accent-900: #402092;
+}
+
+body {
+    margin: 0;
+}
+
+* {
+    font-family: 'Roboto', sans-serif;
+    color: var(--primary-400);
+    font-size: 14px;
+}
+
+/* NavBar */
+header {
+    padding: 10px 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 30px;
+}
+
+.logo p {
+    font-weight: bold;
+    font-size: 30px;
+    text-decoration: none;
+}
+
+/* Dropdown container */
+.dropdown {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+/* Dropdown button */
+.dropdown button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding: 5px 15px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.dropdown span {
+    margin-left: 15px;
+    margin-right: -5px;
+}
+
+.dropdown button:hover {
+    border: 2px solid var(--accent-700);
+    border-radius: 10px;
+    transition: border 0.3s ease;
+}
+
+/* Dropdown menu */
+.dropdown .dropdown-menu {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 158px;
+    padding: 5px 0;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1; /* Ensure the menu appears above other elements */
+}
+
+.dropdown .dropdown-menu .dropdown-menu-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    border: 2px solid transparent;
+    width: 158px;
+    padding: 7px 15px;
+    font-weight: 500;
+}
+
+/* Dropdown menu on hover */
+.dropdown:hover .dropdown-menu {
+    display: flex;
+}
+
+.dropdown .dropdown-menu a {
+    display: block;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.dropdown .dropdown-menu .dropdown-menu-item:hover {
+    border: 2px solid var(--accent-700);
+    border-radius: 10px;
+    transition: border 0.3s ease;
+}
+
+div.login {
+    width: 222px;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.login button {
+    background-color: transparent;
+    font-size: 18px;
+    padding: 8px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#login {
+    border: solid 2px transparent;
+}
+
+#login:hover {
+    color: var(--accent-700);
+    transition: color 0.3s ease;
+}
+
+#signup {
+    color: var(--accent-700);
+    border: solid 2px var(--accent-700);
+}
+
+#signup:hover {
+    background-color: var(--accent-700);
+    color: #FFF;
+    transition: all 0.3s ease;
+}
+
+main {
+    position: relative;
+    box-sizing: border-box;
+    max-height: calc(100vh - 60.67px);
+}
+
+#background-image {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    z-index: -1;
+}
