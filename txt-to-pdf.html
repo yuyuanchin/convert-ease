@@ -46,7 +46,130 @@
 
   <main>
     <img id="background-image" src="./images/bg-7.png" alt="Background image">
+    <div class="main">
+      <h1>TXT to PDF File Converter</h1>
+      <div class="container">
+        <!-- File Upload -->
+        <div class="card file-upload" id="drop-area">
+          <div class="form-container">
+            <img src="images/upload-files.png" alt="Upload files" width="100px">
+            <span id="drag-drop">Drag & Drop</span>
+            <form id="form" action="form-handler.php" method="post" enctype="multipart/form-data">
+              <label for="file">or <span>Browse</span></label>
+              <input class="hidden-input" id="file" type="file" name="uploaded-files" multiple accept=".txt">
+            </form>
+            <p id="max-file-size">Maximum file size: 5MB</p>
+          </div>
+        </div>
+        <!-- Uploaded Files -->
+        <div class="card" id="file-list">
+          <div id="files-container">
+            <!-- <div class="file">
+              <div class="file-name">
+                <img src="/images/file.png" alt="File icon" width="25px" height="25px">
+                <p>file_1.txt</p>
+              </div>
+              <div class="file-size">
+                <p>3MB</p>
+                <span class="material-symbols-outlined">
+                  cancel
+                </span>
+              </div>
+            </div> -->
+          </div>
+          <div class="submit">
+            <button form="form" type="submit">
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </body>
 
 </html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('file');
+    const fileList = document.getElementById('file-list');
+    const filesContainer = document.getElementById('files-container');
+
+    dropArea.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    });
+
+    dropArea.addEventListener('dragleave', function () {
+      dropArea.classList.remove('dragover');
+    });
+
+    dropArea.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+
+      const files = e.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    fileInput.addEventListener('change', function () {
+      const files = fileInput.files;
+      handleFiles(files);
+    });
+
+    function formatFileSize(bytes) {
+      const kilobytes = bytes / 1024;
+      if (kilobytes < 1000) {
+        return kilobytes.toFixed(1) + ' KB';
+      } else {
+        const megabytes = kilobytes / 1024;
+        return megabytes.toFixed(2) + ' MB';
+      }
+    }
+
+    function handleFiles(files) {
+      console.log(files);
+      if (files.length > 0) {
+        const allowedTypes = ['text/plain'];
+        const isValidFileType = Array.from(files).every(file => allowedTypes.includes(file.type));
+
+        if (isValidFileType) {
+          const filesArray = Array.from(files);
+          fileList.style.display = 'flex';
+
+          filesArray.forEach(file => {
+            console.log('passed');
+            const fileContainer = document.createElement('div');
+            fileContainer.classList.add('file');
+            const fileNameContainer = document.createElement('div');
+            fileNameContainer.classList.add('file-name');
+            const fileIcon = document.createElement('img');
+            fileIcon.src = 'images/file.png';
+            fileIcon.alt = 'File icon';
+            fileIcon.width = 25;
+            fileNameContainer.appendChild(fileIcon);
+            const fileName = document.createElement('p');
+            fileName.textContent = file.name;
+            fileNameContainer.appendChild(fileName);
+            fileContainer.appendChild(fileNameContainer);
+            const fileSizeContainer = document.createElement('div');
+            fileSizeContainer.classList.add('file-size');
+            const fileSize = document.createElement('p');
+            fileSize.textContent = formatFileSize(file.size);
+            const deleteIcon = document.createElement('span');
+            deleteIcon.classList.add('material-symbols-outlined');
+            deleteIcon.textContent = 'cancel';
+            fileSizeContainer.appendChild(fileSize);
+            fileSizeContainer.appendChild(deleteIcon);
+            fileContainer.appendChild(fileSizeContainer);
+            filesContainer.appendChild(fileContainer);
+          });
+        } else {
+          alert('Invalid file type. Please upload only TXT files.');
+        }
+      }
+    }
+  });
+</script>
