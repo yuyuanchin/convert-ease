@@ -46,7 +46,92 @@
 
   <main>
     <img id="background-image" src="./images/bg-7.png" alt="Background image">
+    <div class="main">
+      <h1>PDF to TXT File Converter</h1>
+      <div class="container">
+        <div class="card file-upload" id="drop-area">
+          <div class="form-container">
+            <img src="images/upload-files.png" alt="Upload files" width="100px">
+            <span id="drag-drop">Drag & Drop</span>
+            <form action="form-handler.php" method="post" enctype="multipart/form-data">
+              <label for="file">or <span>Browse</span></label>
+              <input class="hidden-input" id="file" type="file" name="uploaded-files" multiple accept=".pdf">
+            </form>
+            <p id="max-file-size">Maximum file size: 5MB</p>
+          </div>
+        </div>
+        <div class="card" id="file-list">
+        </div>
+      </div>
+    </div>
   </main>
 </body>
 
 </html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('file');
+    const fileListContainer = document.getElementById('file-list');
+
+    dropArea.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    });
+
+    dropArea.addEventListener('dragleave', function () {
+      dropArea.classList.remove('dragover');
+    });
+
+    dropArea.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+
+      const files = e.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    fileInput.addEventListener('change', function () {
+      const files = fileInput.files;
+      handleFiles(files);
+    });
+
+    function handleFiles(files) {
+      console.log(files);
+      if (files.length > 0) {
+        const allowedTypes = ['application/pdf'];
+        const isValidFileType = Array.from(files).every(file => allowedTypes.includes(file.type));
+
+        if (isValidFileType) {
+          fileListContainer.style.display = 'flex';
+
+          // Retrieve existing file list
+          const existingFileList = fileListContainer.querySelector('ul');
+
+          // Create new list or use existing one
+          const fileList = existingFileList || document.createElement('ul');
+
+          // Convert 'files' to an array
+          const filesArray = Array.from(files);
+
+          filesArray.forEach(file => {
+            const listItem = document.createElement('li');
+            listItem.textContent = file.name;
+            fileList.appendChild(listItem);
+          });
+
+          // Replace existing file list or append new list
+          if (!existingFileList) {
+            fileListContainer.appendChild(fileList);
+          }
+        } else {
+          fileListContainer.style.display = 'none';
+          alert('Invalid file type. Please upload only PDF files.');
+        }
+      } else {
+        fileListContainer.style.display = 'none';
+      }
+    }
+  })
+</script>
