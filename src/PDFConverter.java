@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class PDFConverter {
+    
     public static void main(String[] args) {
         if (args.length != 3) {
             System.err.println("Usage: PDFConverter <inputFile> <outputFile> <conversionType>");

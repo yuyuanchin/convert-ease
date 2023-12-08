@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST')
 
 $response = "";
 
-if(isset($_FILES['pdffiles'])){
+if(isset($_FILES['pdfFiles'])){
     $response = uploadPDFFiles($_FILES);
 }
 
@@ -32,7 +32,7 @@ if(isset($_POST['download'])){
 <form action="" method="post" enctype="multipart/form-data">
     <h1> Choose files to upload </h1>
     <!-- Choose more than 1 file -->
-    <input type="file" name="pdffiles[]" accept=".pdf" multiple="multiple"/>
+    <input type="file" name="pdfFiles[]" accept=".pdf" multiple="multiple"/>
 
     <button type="submit" name="upload">Upload file </button>
 
