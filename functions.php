@@ -24,7 +24,8 @@ function uploadPDFFiles($files){
 
     foreach($files_array as $tmp_folder => $image_name){
         $inputFile= $uploadDir.$image_name;
-        $javaCommand = "java -jar PDFConverter.jar $inputFile $outputFile $conversionType";
+        $javaCommand = "/usr/bin/java -cp /var/www/html/ConvertEase/PDFConverter.jar:/var/www/html/ConvertEase/lib/pdfbox-app-2.0.30.jar PDFConverter $inputFile $outputFile $conversionType";
+
         exec($javaCommand, $output, $returnVar);
 
         if ($returnVar !== 0) {
@@ -38,28 +39,35 @@ function uploadPDFFiles($files){
 }
 
 function uploadPDFFiles2($files){
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['pdfFiles'])) {
         $uploadDir = "uploads/"; // Directory to store uploaded files
         $downloadDir = "download/";
-        $pdfFile = $uploadDir . basename($_FILES["pdfFile"]["name"]);
-        move_uploaded_file($_FILES["pdfFile"]["tmp_name"], $pdfFile);
+        $pdfFile = $uploadDir . basename($_FILES["pdfFiles"]["name"][0]); // Assuming the first file in the array
+        move_uploaded_file($_FILES['pdfFiles']['tmp_name'][0], $pdfFile);
 
-        $conversionType = $_POST["conversionType"];
+        $conversionType = $_POST['conversionType'];
         $outputFile = $downloadDir . ($conversionType == "pdf2txt" ? "txt" : "pdf");
 
+        // Make sure to define $inputFile
+        $inputFile = $pdfFile;
+
         // Call Java application
-        $javaCommand = "java -jar PDFConverter.jar $pdfFile $outputFile $conversionType";
+        $javaCommand = "/usr/bin/java -cp /var/www/html/ConvertEase/PDFConverter.jar:/var/www/html/ConvertEase/lib/pdfbox-app-2.0.30.jar PDFConverter $inputFile $outputFile $conversionType";
+        exec($javaCommand, $output, $returnVar);
+
+        // Print the output for debugging
+        echo "Java Output:<br>";
+        echo nl2br(implode("\n", $output));
+
         exec($javaCommand, $output, $returnVar);
 
         if ($returnVar === 0) {
             echo "Conversion complete. <a href='$outputFile' download>Download Result</a>";
         } else {
-            return "Conversion failed.";
+            return "Conversion failed. Output: " . implode("\n", $output);
         }
     }
     return "success";
-
 }
 
 function downloadFile($filename) {

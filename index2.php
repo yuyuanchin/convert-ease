@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 
 require "functions.php";
 
@@ -33,7 +37,7 @@ if(isset($_POST['download'])){
     <h1> Choose files to upload </h1>
     <!-- Choose more than 1 file -->
     <input type="file" name="pdfFiles[]" accept=".pdf" multiple="multiple"/>
-
+    <input type="hidden" name="conversionType" value="pdf2txt">
     <button type="submit" name="upload">Upload file </button>
 
     <?php
@@ -59,10 +63,10 @@ for ($a = 2; $a < count($files); $a++){
     <p>
         <?php echo $files[$a]; ?>
 
-        <form method="post" action="" style="display:inline;">
-            <input type="hidden" name="file" value="<?php echo $files[$a]; ?>">
-            <button type="submit" name="download">Download</button>
-        </form>
+    <form method="post" action="" style="display:inline;">
+        <input type="hidden" name="file" value="<?php echo $files[$a]; ?>">
+        <button type="submit" name="download">Download</button>
+    </form>
     </p>
     <?php
 }
