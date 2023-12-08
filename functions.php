@@ -2,11 +2,18 @@
 function uploadPDFFiles($files){
 
     if($files['pdfFiles']['name'][0] == "")
-
         return "Please select at least one file";
 
     $uploadDir = "uploads/";
-    $downloadDir = "download/";
+    $downloadDir = "downloads/";
+
+    if (!file_exists($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    if (!file_exists($downloadDir)) {
+        mkdir($downloadDir, 0777, true);
+    }
 
     $conversionType = $_POST["conversionType"];
 
@@ -18,18 +25,17 @@ function uploadPDFFiles($files){
     // save file in uploads folder
     foreach($files_array as $tmp_folder => $image_name){
         move_uploaded_file($tmp_folder, $uploadDir.$image_name);
-    }
 
-    $outputFile = $downloadDir . ($conversionType == "pdf2txt" ? "txt" : "pdf");
-
-    foreach($files_array as $tmp_folder => $image_name){
+        $outputFile = $downloadDir . pathinfo($image_name, PATHINFO_FILENAME).".txt";
         $inputFile= $uploadDir.$image_name;
-        $javaCommand = "java -jar PDFConverter.jar $inputFile $outputFile $conversionType";
+
+        $javaCommand = "/usr/bin/java -cp /var/www/html/ConvertEase/PDFConverter.jar:/var/www/html/ConvertEase/lib/pdfbox-app-2.0.30.jar PDFConverter $inputFile $outputFile $conversionType";
+
         exec($javaCommand, $output, $returnVar);
 
         if ($returnVar !== 0) {
             // Log or handle the error
-            return "Conversion failed: " . implode("\n", $output);
+            return "Conversion failed. Please try again. " . implode("\n", $output);
         }
     }
 
@@ -37,33 +43,8 @@ function uploadPDFFiles($files){
 
 }
 
-function uploadPDFFiles2($files){
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $uploadDir = "uploads/"; // Directory to store uploaded files
-        $downloadDir = "download/";
-        $pdfFile = $uploadDir . basename($_FILES["pdfFile"]["name"]);
-        move_uploaded_file($_FILES["pdfFile"]["tmp_name"], $pdfFile);
-
-        $conversionType = $_POST["conversionType"];
-        $outputFile = $downloadDir . ($conversionType == "pdf2txt" ? "txt" : "pdf");
-
-        // Call Java application
-        $javaCommand = "java -jar PDFConverter.jar $pdfFile $outputFile $conversionType";
-        exec($javaCommand, $output, $returnVar);
-
-        if ($returnVar === 0) {
-            echo "Conversion complete. <a href='$outputFile' download>Download Result</a>";
-        } else {
-            return "Conversion failed.";
-        }
-    }
-    return "success";
-
-}
-
-function downloadFile($filename) {
-    $file_path = "download/" . $filename;
+function downloadTXTFile($filename) {
+    $file_path = "downloads/" . $filename;
 
     if (file_exists($file_path)) {
         // Send appropriate headers for file download
@@ -86,7 +67,7 @@ function deleteFiles() {
             unlink($file);
     }
 
-    $downloadDirectory = 'download/';
+    $downloadDirectory = 'downloads/';
     $files = glob($downloadDirectory . '*');
     foreach ($files as $file) {
         if (is_file($file))
