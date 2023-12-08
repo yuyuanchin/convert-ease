@@ -251,4 +251,78 @@ label span {
 
 #file-list {
   display: none;
+  justify-content: space-between;
+  padding: 25px 20px;
+}
+
+#files-container {
+  flex: 1;
+  /* padding-top: 85px; */
+  padding-right: 20px;
+  flex-basis: 0;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  justify-content: start;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: clip;
+  margin-bottom: 15px;
+}
+
+.file {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--secondary-100);
+  border: solid 1px var(--accent-700);
+  border-radius: 8px;
+  padding: 0 8px;
+}
+
+.file .file-name,
+.file-size {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
+}
+
+/* Thin scrollbar track */
+::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Change color on hover */
+}
+
+/* Thin scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background-color: #999; /* Set the color of the scrollbar handle */
+  border-radius: 4px; /* Round the corners of the scrollbar handle */
+}
+
+/* Thin scrollbar track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Set the color of the scrollbar track */
+}
+
+.submit button {
+  padding: 8px 40px;
+  background-color: var(--accent-600);
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.submit button:hover {
+  background-color: var(--accent-700);
+  transition: all 0.2s ease;
 }
