@@ -5,9 +5,9 @@ ini_set('display_errors', '1');
 
 echo exec('whoami');
 
-//if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
-//    deleteFiles();
-//}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
+    deleteFiles();
+}
 
 
 //if ($_SERVER['REQUEST_METHOD'] === 'POST') {
