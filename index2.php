@@ -19,6 +19,7 @@ if(isset($_FILES['pdfFiles'])){
 if(isset($_POST['download'])){
     $filename = isset($_POST['file']) ? $_POST['file'] : '';
     downloadTXTFile($filename);
+
 }
 
 ?>
