@@ -1,7 +1,5 @@
 <?php
-
 echo php_ini_loaded_file();
-
 const UPLOAD_DIR = 'uploads/';
 const DOWNLOAD_DIR = 'downloads/';
 
@@ -10,11 +8,11 @@ if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'convert
     deleteFiles();
 }
 
-//if(isset($_POST['download'])){
-//    $conversionType = $_POST['conversionType'];
-//    $filename = isset($_POST['file']) ? $_POST['file'] : '';
-//    downloadFile($filename);
-//}
+if(isset($_POST['download'])){
+    $conversionType = $_POST['conversionType'];
+    $filename = isset($_POST['file']) ? $_POST['file'] : '';
+    downloadFile($filename);
+}
 
 //if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
 //    deleteFiles();
@@ -75,12 +73,13 @@ function convertFile($conversionType)
 
 
 function downloadFile($filename) {
-    $file_path = "downloads/" . $filename;
+    $file_path = 'downloads/' . $filename;
 
     if (file_exists($file_path)) {
         // Send appropriate headers for file download
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . filesize($file_path));
         readfile($file_path);
         exit();
     } else {
