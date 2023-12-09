@@ -353,6 +353,15 @@ label span:hover {
   background: #f1f1f1; /* Set the color of the scrollbar track */
 }
 
+#download {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  padding: 0 3px;
+  border: none;
+  cursor: pointer;
+}
+
 .submit button {
   padding: 8px 40px;
   background-color: var(--accent-600);

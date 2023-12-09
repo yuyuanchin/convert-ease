@@ -104,9 +104,14 @@ function uploadFile(file) {
     </div>
     <div class="file-size">
       <p>${formatFileSize(file.size)}</p>
-      <span class="material-symbols-outlined">
-        cancel
-      </span>
+      <form method="post" action="" style="display:inline;">
+        <input type="hidden" name="file" value="${truncateFileName(file.name)}">
+        <button id="download" type="submit" name="download">
+          <span class="material-symbols-outlined">
+            download
+          </span>
+        </button>
+      </form>
     </div>
   `;
   filesContainer.appendChild(div);
@@ -127,6 +132,15 @@ function uploadFile(file) {
   http.send(data);
   // div.querySelector(".cross").onclick = () => http.abort();
   http.onabort = () => div.remove();
+}
+
+function truncateFileName(fileName) {
+  // Check if the file name ends with ".pdf"
+  if (fileName.toLowerCase().endsWith(".pdf")) {
+    // Remove ".pdf" and append ".txt"
+    fileName = fileName.substring(0, fileName.length - 4) + ".txt";
+  }
+  return fileName;
 }
 
 // function handleFiles(files) {
