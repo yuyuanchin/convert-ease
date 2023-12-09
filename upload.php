@@ -15,13 +15,13 @@ const UPLOAD_DIR = __DIR__ . '/uploads';
 
 
 $is_post_request = strtolower($_SERVER['REQUEST_METHOD']) === 'post';
-$has_files = isset($_FILES['files']);
+$has_files = isset($_FILES['file']);
 
 if (!$is_post_request || !$has_files) {
   redirect_with_message('Invalid file upload operation', FLASH_ERROR);
 }
 
-$files = $_FILES['files'];
+$files = $_FILES['file'];
 $file_count = count($files['name']);
 
 // Validation
@@ -61,20 +61,29 @@ if ($errors) {
   redirect_with_message(format_messages('The following errors occurred:', $errors), FLASH_ERROR);
 }
 
-// Move files
-for ($i = 0; $i < $file_count; $i++) {
-  $filename = $files['name'][$i];
-  $tmp = $files['tmp_name'][$i];
-  $mime_type = get_mime_type($tmp);
+// // Move files
+// for ($i = 0; $i < $file_count; $i++) {
+//   $filename = $files['name'][$i];
+//   $tmp = $files['tmp_name'][$i];
+//   $mime_type = get_mime_type($tmp);
 
-  // Set filename as basename + extension
-  $uploaded_file = pathinfo($filename, PATHINFO_FILENAME) . '.' . ALLOWED_FILES[$mime_type];
-  // New filepath
-  $filepath = UPLOAD_DIR . '/' . $uploaded_file;
-  // Move file to upload dir
-  $success = move_uploaded_file($tmp, $filepath);
-  if (!$success) {
-    $errors[$filename] = "The file $filename was failed to move.";
+//   // Set filename as basename + extension
+//   $uploaded_file = pathinfo($filename, PATHINFO_FILENAME) . '.' . ALLOWED_FILES[$mime_type];
+//   // New filepath
+//   $filepath = UPLOAD_DIR . '/' . $uploaded_file;
+//   // Move file to upload dir
+//   $success = move_uploaded_file($tmp, $filepath);
+//   if (!$success) {
+//     $errors[$filename] = "The file $filename was failed to move.";
+//   }
+// }
+
+if (!empty($_FILES['file'])) {
+  $targetDir = 'uploads/';
+  $filename = basename($_FILES['file']['name']);
+  $targetFilePath = $targetDir . $filename;
+  if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
+    echo 'File Uploaded';
   }
 }
 

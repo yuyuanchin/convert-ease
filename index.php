@@ -57,14 +57,20 @@ require_once __DIR__ . '/inc/flash.php';
         <!-- File Upload -->
         <div class="card file-upload" id="drop-area">
           <div class="form-container">
-            <img src="images/upload-files.png" alt="Upload files" width="100px">
-            <span id="drag-drop">Drag & Drop</span>
-            <form id="form" action="upload.php" method="post" enctype="multipart/form-data">
-              <label for="file">or <span>Browse</span></label>
-              <input class="hidden-input" id="file" type="file" name="files[]" multiple accept=".pdf">
-            </form>
-            <p id="max-file-size">Maximum file size: 5MB</p>
-            <?php flash('upload') ?>
+            <div>
+              <img src="images/upload-files.png" alt="Upload files" width="100px">
+              <span id="drag-drop">Drag & Drop</span>
+              <p id="or">or</p>
+              <form id="form" action="convert.php" method="post" enctype="multipart/form-data">
+                <label for="file"><span id="file-selector">Browse Files</span></label>
+                <input class="hidden-input" id="file" type="file" name="files[]" multiple accept=".pdf">
+              </form>
+              <p id="max-file-size">Maximum file size: 5MB</p>
+              <?php flash('upload') ?>
+            </div>
+            <div>
+              <div class="drop-here">Drop Here</div>
+            </div>
           </div>
         </div>
         <!-- Uploaded Files -->
@@ -84,7 +90,7 @@ require_once __DIR__ . '/inc/flash.php';
             </div> -->
           </div>
           <div class="submit">
-            <button form="form" type="submit">
+            <button form="form" type="submit" id="submit">
               Submit
             </button>
           </div>
@@ -96,86 +102,4 @@ require_once __DIR__ . '/inc/flash.php';
 
 </html>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const dropArea = document.getElementById('drop-area');
-    const fileInput = document.getElementById('file');
-    const fileList = document.getElementById('file-list');
-    const filesContainer = document.getElementById('files-container');
-
-    dropArea.addEventListener('dragover', function (e) {
-      e.preventDefault();
-      dropArea.classList.add('dragover');
-    });
-
-    dropArea.addEventListener('dragleave', function () {
-      dropArea.classList.remove('dragover');
-    });
-
-    dropArea.addEventListener('drop', function (e) {
-      e.preventDefault();
-      dropArea.classList.remove('dragover');
-
-      const files = e.dataTransfer.files;
-      handleFiles(files);
-    });
-
-    fileInput.addEventListener('change', function () {
-      const files = fileInput.files;
-      handleFiles(files);
-    });
-
-    function formatFileSize(bytes) {
-      const kilobytes = bytes / 1024;
-      if (kilobytes < 1000) {
-        return kilobytes.toFixed(1) + ' KB';
-      } else {
-        const megabytes = kilobytes / 1024;
-        return megabytes.toFixed(2) + ' MB';
-      }
-    }
-
-    function handleFiles(files) {
-      console.log(files);
-      if (files.length > 0) {
-        const allowedTypes = ['application/pdf'];
-        const isValidFileType = Array.from(files).every(file => allowedTypes.includes(file.type));
-
-        if (isValidFileType) {
-          const filesArray = Array.from(files);
-          fileList.style.display = 'flex';
-
-          filesArray.forEach(file => {
-            console.log('passed');
-            const fileContainer = document.createElement('div');
-            fileContainer.classList.add('file');
-            const fileNameContainer = document.createElement('div');
-            fileNameContainer.classList.add('file-name');
-            const fileIcon = document.createElement('img');
-            fileIcon.src = 'images/file.png';
-            fileIcon.alt = 'File icon';
-            fileIcon.width = 25;
-            fileNameContainer.appendChild(fileIcon);
-            const fileName = document.createElement('p');
-            fileName.textContent = file.name;
-            fileNameContainer.appendChild(fileName);
-            fileContainer.appendChild(fileNameContainer);
-            const fileSizeContainer = document.createElement('div');
-            fileSizeContainer.classList.add('file-size');
-            const fileSize = document.createElement('p');
-            fileSize.textContent = formatFileSize(file.size);
-            const deleteIcon = document.createElement('span');
-            deleteIcon.classList.add('material-symbols-outlined');
-            deleteIcon.textContent = 'cancel';
-            fileSizeContainer.appendChild(fileSize);
-            fileSizeContainer.appendChild(deleteIcon);
-            fileContainer.appendChild(fileSizeContainer);
-            filesContainer.appendChild(fileContainer);
-          });
-        } else {
-          alert('Invalid file type. Please upload only PDF files.');
-        }
-      }
-    }
-  });
-</script>
+<script src="script.js"></script>
