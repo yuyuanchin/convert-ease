@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once __DIR__ . '/inc/flash.php';
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -54,11 +59,12 @@
           <div class="form-container">
             <img src="images/upload-files.png" alt="Upload files" width="100px">
             <span id="drag-drop">Drag & Drop</span>
-            <form id="form" action="form-handler.php" method="post" enctype="multipart/form-data">
+            <form id="form" action="upload.php" method="post" enctype="multipart/form-data">
               <label for="file">or <span>Browse</span></label>
-              <input class="hidden-input" id="file" type="file" name="uploaded-files" multiple accept=".pdf">
+              <input class="hidden-input" id="file" type="file" name="files[]" multiple accept=".pdf">
             </form>
             <p id="max-file-size">Maximum file size: 5MB</p>
+            <?php flash('upload') ?>
           </div>
         </div>
         <!-- Uploaded Files -->
