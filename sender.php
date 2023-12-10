@@ -88,11 +88,6 @@ if (!empty($_FILES['file'])) {
         echo 'Invalid file type. Please upload only PDF files.';
     }
 
-//    if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
-//        convertFile("pdf2txt");
-//        echo 'File Uploaded';
-//    }
-
 }
 
 function convertFile($conversionType)
