@@ -3,10 +3,16 @@ echo php_ini_loaded_file();
 const UPLOAD_DIR = 'uploads/';
 const DOWNLOAD_DIR = 'downloads/';
 
-if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'convertease.com') !== false) {
-    // The script was accessed from a page on your domain
+error_reporting(E_ALL);
+ini_set('display_errors', true);
+
+if (isset($_GET['deleteFiles']) && $_GET['deleteFiles'] === 'true') {
     deleteFiles();
 }
+//if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'convertease.com') !== false) {
+//    // The script was accessed from a page on your domain
+//    deleteFiles();
+//}
 
 if(isset($_POST['download'])){
     $conversionType = $_POST['conversionType'];
@@ -17,6 +23,7 @@ if(isset($_POST['download'])){
 //if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
 //    deleteFiles();
 //}
+
 
 if (!empty($_FILES['file'])) {
 

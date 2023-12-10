@@ -85,14 +85,22 @@
                     </div> -->
                 </div>
                 <div class="submit">
-                    <button form="form" type="submit" id="submit" name="upload">
-                        Submit
+                    <button type="submit" id="submit" name="upload">
+                        Convert
                     </button>
                 </div>
             </div>
         </div>
     </div>
 </main>
+<script>
+    window.onload = function () {
+        // JavaScript to trigger file deletion when the page loads
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'sender.php?deleteFiles=true', true);
+        xhr.send();
+    };
+</script>
 </body>
 
 </html>

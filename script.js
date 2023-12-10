@@ -121,29 +121,29 @@ function uploadFile(file) {
     var data = new FormData();
     data.append("file", file);
 
-    var form = div.querySelector("form");
-    form.addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent the default form submission
-        // Handle form submission here
-        // For example, you can trigger the download via Ajax or other methods
-        // var formData = new FormData(form);
-        // formData.append("download", "true"); // You might need to adjust this based on your server-side code
-        // fetch("senders.php", {
-        //     method: "POST",
-        //     body: formData,
-        // })
-        //     .then((response) => {
-        //         if (!response.ok) {
-        //             throw new Error("Download request failed");
-        //         }
-        //         // Handle successful download
-        //         console.log("File downloaded successfully");
-        //     })
-        //     .catch((error) => {
-        //         // Handle download error
-        //         console.error("Error downloading file:", error.message);
-        //     });
-    });
+    // var form = div.querySelector("form");
+    // form.addEventListener("submit", function (e) {
+    //     e.preventDefault(); // Prevent the default form submission
+    //     // Handle form submission here
+    //     // For example, you can trigger the download via Ajax or other methods
+    //     // var formData = new FormData(form);
+    //     // formData.append("download", "true"); // You might need to adjust this based on your server-side code
+    //     // fetch("senders.php", {
+    //     //     method: "POST",
+    //     //     body: formData,
+    //     // })
+    //     //     .then((response) => {
+    //     //         if (!response.ok) {
+    //     //             throw new Error("Download request failed");
+    //     //         }
+    //     //         // Handle successful download
+    //     //         console.log("File downloaded successfully");
+    //     //     })
+    //     //     .catch((error) => {
+    //     //         // Handle download error
+    //     //         console.error("Error downloading file:", error.message);
+    //     //     });
+    // });
     http.onload = () => {
         div.classList.add("complete");
         div.classList.remove("in-prog");
