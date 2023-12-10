@@ -93,16 +93,6 @@ function uploadFiles($files){
         header("Location: txt-to-pdf.html");
     }
 
-//        downloadFile();
-//        header("Location: index.html");
-//        exit();
-//        if ($returnVar !== 0) {
-//            // Log or handle the error
-//            return "Conversion failed. Please try again. " . implode("\n", $output);
-//        }
-
-//    return "success";
-
 }
 
 function downloadFile($filename) {
