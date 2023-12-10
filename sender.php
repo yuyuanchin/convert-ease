@@ -14,11 +14,41 @@ if (isset($_GET['deleteFiles']) && $_GET['deleteFiles'] === 'true') {
 //    deleteFiles();
 //}
 
-if(isset($_POST['download'])){
-    $conversionType = $_POST['conversionType'];
-    $filename = isset($_POST['file']) ? $_POST['file'] : '';
-    downloadFile($filename);
+//if(isset($_GET['convert'])){
+//    $conversionType = isset($_GET['conversionType']) ? $_GET['conversionType'] : '';
+//    if($conversionType === "pdf2txt") {
+//        convertFile("pdf2txt");
+//    } elseif ($conversionType === "txt2pdf") {
+//        convertFile("txt2pdf");
+//    }
+//}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['convertButton'])) {
+        $conversionType = isset($_POST['conversionType']) ? $_POST['conversionType'] : '';
+
+        if ($conversionType === "pdf2txt") {
+            convertFile("pdf2txt");
+        } elseif ($conversionType === "txt2pdf") {
+            convertFile("txt2pdf");
+        }
+    }
 }
+
+//if(isset($_POST['download'])){
+//    $conversionType = $_POST['conversionType'];
+//    $filename = isset($_POST['file']) ? $_POST['file'] : '';
+//    downloadFile($filename);
+//}
+
+//if(isset($_POST['convertButton'])){
+//    $conversionType = isset($_POST['conversionType']) ? $_POST['conversionType'] : '';
+////    if($conversionType === "pdf2txt") {
+//        convertFile("pdf2txt");
+////    } elseif ($conversionType === "txt2pdf") {
+////        convertFile("txt2pdf");
+////    }
+//}
 
 //if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
 //    deleteFiles();
@@ -41,7 +71,6 @@ if (!empty($_FILES['file'])) {
     $filename = basename($_FILES['file']['name']);
     $targetFilePath = $targetDir . $filename;
     if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
-            convertFile("pdf2txt");
             echo 'File Uploaded';
     }
 
@@ -87,6 +116,11 @@ function downloadFile($filename) {
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         header('Content-Length: ' . filesize($file_path));
+        // Clear output buffer to ensure clean download
+        ob_clean();
+        flush();
+
+        // Read and output the file
         readfile($file_path);
         exit();
     } else {

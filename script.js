@@ -47,6 +47,139 @@ dropArea.ondrop = (e) => {
     }
 };
 
+window.onload = function () {
+    // JavaScript to trigger file deletion when the page loads
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'sender.php?deleteFiles=true', true);
+    xhr.send();
+};
+
+// document.getElementById("convertButton").addEventListener("click", function() {
+//     // Your PHP file that handles the conversion logic
+//     var phpScript = "sender.php";
+//
+//     // Data to be sent to the server, including the hidden input
+//     var data = new FormData();
+//     data.append("conversionType", "pdf2txt");
+//
+//     // Make an asynchronous request to the server using the Fetch API
+//     fetch(phpScript, {
+//         method: "POST",
+//         body: data
+//     })
+//         .then(response => response.text())
+//         .then(result => {
+//             // Handle the result if needed
+//             console.log(result);
+//         })
+//         .catch(error => {
+//             // Handle errors
+//             console.error("Error:", error);
+//         });
+// });
+
+document.getElementById("convertButton").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the default click behavior
+
+    // Your additional logic here, if needed
+
+    // Optionally, you can use AJAX to handle the click event without navigating away from the page
+    // For example:
+    var formData = new FormData(document.getElementById("conversionForm"));
+    fetch("sender.php", {
+        method: "POST",
+        body: formData
+    })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+});
+
+// document.getElementById('convertButton').addEventListener('click', function () {
+//     // Example: Trigger pdf2txt conversion
+//     triggerConversion('pdf2txt');
+// });
+//
+// function triggerConversion(conversionType) {
+//     var xhr = new XMLHttpRequest();
+//     var formData = new FormData(document.getElementById('conversionForm'));
+//
+//     // Append the conversion type to the form data
+//     formData.append('conversionType', conversionType);
+//
+//     xhr.open('POST', 'sender.php', true);
+//
+//     xhr.onload = function () {
+//         if (xhr.status == 200) {
+//             console.log('Conversion successful:', xhr.responseText);
+//         } else {
+//             console.error('Conversion failed:', xhr.statusText);
+//         }
+//     };
+//
+//     xhr.onerror = function () {
+//         console.error('Network error during conversion');
+//     };
+//
+//     xhr.send(formData);
+// }
+
+// document.getElementById("conversionForm").addEventListener("submit", function (event) {
+//     event.preventDefault(); // Prevent the default form submission behavior
+//
+//     // Your additional logic here, if needed
+//
+//     // Optionally, you can use AJAX to handle the form submission without navigating away from the page
+//     // For example:
+//     var formData = new FormData(document.getElementById("conversionForm"));
+//     fetch("sender.php", {
+//         method: "POST",
+//         body: formData
+//     })
+//     .then(response => response.text())
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error));
+// });
+
+// var retForm = document.getElementById("conversionForm");
+// var retOp = document.getElementById("retOp");
+// retForm.addEventListener("submit", function (event) {
+//     event.preventDefault(); // Prevent the default form submission behavior
+//
+//     // Your additional logic here, if needed
+//
+//     // Create a FormData object from the form
+//     var formData = new FormData(retForm);
+//
+//     // Make a fetch request to sender.php
+//     fetch("sender.php", {
+//         method: "POST",
+//         body: formData,
+//     })
+//         .then(response => response.text())
+//         .then(data => {
+//             // Handle the response data, if needed
+//             console.log(data);
+//
+//             // Assuming "data" contains information about the conversion status
+//             // You can update the UI or display a success message accordingly
+//             retForm.style.display = "none";
+//             retOp.innerHTML = "<b>Form submit successful</b>";
+//         })
+//         .catch(error => {
+//             // Handle errors, if any
+//             console.error(error);
+//
+//             // Display an error message in the UI
+//             retOp.innerHTML = "<b>Error occurred during form submission</b>";
+//         });
+// });
+
+// function submitConversionForm(event) {
+//     retForm.style.display = "none";
+//     retOp.innerHTML = "<b>Form submit successful</b>";
+// }
+
 function typeValidation(type) {
     var splitType = type.split("/")[0];
     if (type == "application/pdf") {
@@ -168,6 +301,23 @@ function truncateFileName(fileName) {
     }
     return fileName;
 }
+
+// function submitConversionForm(event) {
+//     event.preventDefault(); // Prevent the default form submission behavior
+//
+//     // Your additional logic here, if needed
+//
+//     // Optionally, you can use AJAX to handle the form submission without navigating away from the page
+//     // For example:
+//     var formData = new FormData(document.getElementById("conversionForm"));
+//     fetch("sender.php", {
+//         method: "POST",
+//         body: formData
+//     })
+//     .then(response => response.text())
+//     .then(data => console.log(data))
+//     .catch(error => console.error(error));
+// }
 
 // function handleFiles(files) {
 //   console.log(files);
