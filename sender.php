@@ -62,15 +62,36 @@ if (!empty($_FILES['file'])) {
         mkdir(DOWNLOAD_DIR, 0777, true);
     }
 
-    //$conversionType = $_POST["conversionType"];
-
     $targetDir = 'uploads/';
     $filename = basename($_FILES['file']['name']);
     $targetFilePath = $targetDir . $filename;
-    if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
-        convertFile("pdf2txt");
-        echo 'File Uploaded';
+
+    $fileInfo = pathinfo($filename);
+    $extension = strtolower($fileInfo['extension']);
+
+    // Check if the file is a PDF
+    if ($extension === 'pdf') {
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
+            convertFile("pdf2txt");
+            echo 'File Uploaded';
+        } else {
+            echo 'Error uploading file';
+        }
+    } elseif ($extension === 'txt'){
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
+            convertFile("txt2pdf");
+            echo 'File Uploaded';
+        } else {
+            echo 'Error uploading file';
+        }
+    } else {
+        echo 'Invalid file type. Please upload only PDF files.';
     }
+
+//    if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
+//        convertFile("pdf2txt");
+//        echo 'File Uploaded';
+//    }
 
 }
 
