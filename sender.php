@@ -9,51 +9,48 @@ ini_set('display_errors', true);
 if (isset($_GET['deleteFiles']) && $_GET['deleteFiles'] === 'true') {
     deleteFiles();
 }
-//if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'convertease.com') !== false) {
-//    // The script was accessed from a page on your domain
-//    deleteFiles();
-//}
 
-//if(isset($_GET['convert'])){
-//    $conversionType = isset($_GET['conversionType']) ? $_GET['conversionType'] : '';
-//    if($conversionType === "pdf2txt") {
-//        convertFile("pdf2txt");
-//    } elseif ($conversionType === "txt2pdf") {
-//        convertFile("txt2pdf");
-//    }
-//}
+if (isset($_GET['download']) && $_GET['download'] === 'true') {
+    $conversionType = $_GET['conversionType'];
+    $filename = isset($_GET['file']) ? strtolower($_GET['file']) : '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['convertButton'])) {
-        $conversionType = isset($_POST['conversionType']) ? $_POST['conversionType'] : '';
+    echo "Current Working Directory: " . getcwd() . "<br>";
 
-        if ($conversionType === "pdf2txt") {
-            convertFile("pdf2txt");
-        } elseif ($conversionType === "txt2pdf") {
-            convertFile("txt2pdf");
-        }
+    // Debugging: Output the list of files in the downloads directory
+    $filesInDirectory = scandir('downloads/');
+    echo "Files in downloads directory: " . implode(', ', $filesInDirectory) . "<br>";
+
+
+    // Debugging: Output the requested filename
+    echo "Requested Filename: $filename<br>";
+
+    // Construct the file path
+    $filePath = 'downloads/' . $filename;
+
+    // Debugging: Output the constructed file path
+    echo "Constructed File Path: $filePath<br>";
+
+    if (file_exists($filePath)) {
+        // Set appropriate headers for file download
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+        header('Content-Length: ' . filesize($filePath));
+
+        // Clear output buffer to ensure clean download
+        ob_clean();
+        flush();
+
+        // Read and output the file
+        readfile($filePath);
+        exit();
+    } else {
+        // Debugging: Output a message if the file is not found
+        echo "File not found: $filename";
     }
+} else {
+    // Invalid download request
+    echo "Invalid download request";
 }
-
-//if(isset($_POST['download'])){
-//    $conversionType = $_POST['conversionType'];
-//    $filename = isset($_POST['file']) ? $_POST['file'] : '';
-//    downloadFile($filename);
-//}
-
-//if(isset($_POST['convertButton'])){
-//    $conversionType = isset($_POST['conversionType']) ? $_POST['conversionType'] : '';
-////    if($conversionType === "pdf2txt") {
-//        convertFile("pdf2txt");
-////    } elseif ($conversionType === "txt2pdf") {
-////        convertFile("txt2pdf");
-////    }
-//}
-
-//if ($_SERVER['REQUEST_METHOD'] !== 'POST'){
-//    deleteFiles();
-//}
-
 
 if (!empty($_FILES['file'])) {
 
@@ -65,13 +62,14 @@ if (!empty($_FILES['file'])) {
         mkdir(DOWNLOAD_DIR, 0777, true);
     }
 
-    $conversionType = $_POST["conversionType"];
+    //$conversionType = $_POST["conversionType"];
 
     $targetDir = 'uploads/';
     $filename = basename($_FILES['file']['name']);
     $targetFilePath = $targetDir . $filename;
     if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFilePath)) {
-            echo 'File Uploaded';
+        convertFile("pdf2txt");
+        echo 'File Uploaded';
     }
 
 }
@@ -106,8 +104,6 @@ function convertFile($conversionType)
     }
 }
 
-
-
 function downloadFile($filename) {
     $file_path = 'downloads/' . $filename;
 
@@ -125,7 +121,7 @@ function downloadFile($filename) {
         exit();
     } else {
         // File not found
-        echo "File not found.";
+        echo "File not found: $filename";
     }
 }
 
